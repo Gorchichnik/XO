@@ -10,7 +10,8 @@ public class Play {
       ArrayList<Integer> xs = new ArrayList<Integer>();
       ArrayList<Integer> ys = new ArrayList<Integer>();
       ArrayList<Integer> xt = new ArrayList<Integer>();
-
+      Ai ai = new Ai();
+	
       void game(short d){
                  arr = new String[d][d];
                  for(int x=0; x<=d-1; x++){
@@ -21,7 +22,8 @@ public class Play {
                     System.out.print("\r\n");
                  }            
                  System.out.print("\r\n");
-                 System.out.println("d = "+d);
+
+                 ai.defineMatrix(d,arr);
                  dim=d;
                  createwincomb();
                  play();  
@@ -153,9 +155,10 @@ public class Play {
                y = sc.nextShort();
                if( arr[x-1][y-1] != "X" & arr[x-1][y-1] != "O"){
                    arr[x-1][y-1] = "X";
+                   
                    num1++;
                    xs.add((int)(y*Math.pow(10,x-1)));
-                   
+                   System.out.println(" ");
                    System.out.println("Your turn");
                    System.out.println(" ");
                    f.viewarr(arr);
@@ -176,18 +179,20 @@ public class Play {
       }
       
       void aiturn(){
-                x = getRandomShort((short)1,dim);
-                y = getRandomShort((short)1,dim);
-                if(arr[x-1][y-1] == "O" | arr[x-1][y-1] == "X"){
-                    aiturn();
-                } else {
-                    arr[x-1][y-1] = "O";
-                    ys.add((int)(y*Math.pow(10,x-1)));
+		
+                    ai.humanX(x,y);
+                    ai.aiturn();
+                    x = ai.getX();
+	            y = ai.getY();   
+                    
+                    arr[x][y] = "O";
+                    ys.add((int)((y+1)*Math.pow(10,x)));
                     System.out.println("Computer turn");
                     System.out.print("\r\n");
                     f.viewarr(arr);
                     System.out.print("\r\n");
-                } 
+		
+                
             
 }
 

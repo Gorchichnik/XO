@@ -1,8 +1,9 @@
-public class XO {
-      
-      public static void main(String args[]){
-            
-            Hello g = new Hello();
+import java.io.IOException;
+
+public class CLS {
+    public static void main(String... arg) throws IOException, InterruptedException {
+        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+	Hello g = new Hello();
             g.hello();
-      }
+    }
 }
