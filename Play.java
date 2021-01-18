@@ -3,17 +3,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Play {
+
+      Ai ai = new Ai();
       Field f = new Field();
       String[][] arr;
       short x,y,dim;
       short num1 = 0;
+
       ArrayList<Integer> xs = new ArrayList<Integer>();
       ArrayList<Integer> ys = new ArrayList<Integer>();
       ArrayList<Integer> xt = new ArrayList<Integer>();
-      Ai ai = new Ai();
 	
       void game(short d){
                  arr = new String[d][d];
+
                  for(int x=0; x<=d-1; x++){
                     for(int y=0; y<=d-1; y++){
                        arr[x][y] = "_";
@@ -26,8 +29,7 @@ public class Play {
                  ai.defineMatrix(d,arr);
                  dim=d;
                  createwincomb();
-                 play();  
-                 
+                 play();                   
            }
 
       void createwincomb(){
@@ -49,10 +51,7 @@ public class Play {
               }
 
               xt.add(k);
-              xt.add(h);
-
-             
-              
+              xt.add(h);                          
       }  
 
       void game1(){                                    
@@ -79,7 +78,7 @@ public class Play {
                     for(int j = i+1; j<= xr.size()-dim+1; j++){
                            for(int k = j+1; k<= xr.size()-dim+2; k++){
                                   s = xr.get(i)+xr.get(j)+xr.get(k);
-                                  
+                                 
                                   if(xt.contains(s)){
                                         w = true;
                                   }
@@ -149,55 +148,57 @@ public class Play {
       void play(){ 
             System.out.println("PLease enter coordinates of your turn");
             System.out.print("\r\n");
+
             Scanner sc = new Scanner(System.in);
+
             try{
                x = sc.nextShort();
                y = sc.nextShort();
+
                if( arr[x-1][y-1] != "X" & arr[x-1][y-1] != "O"){
-                   arr[x-1][y-1] = "X";
-                   
+                   arr[x-1][y-1] = "X";                   
                    num1++;
                    xs.add((int)(y*Math.pow(10,x-1)));
+
                    System.out.println(" ");
                    System.out.println("Your turn");
                    System.out.println(" ");
+
                    f.viewarr(arr);
+
                    System.out.print("\r\n");
+
                    game1();
                 
 	        } else {
  	 	    System.out.println("This cell is not empty!");
                     System.out.println();
+
                     play();
                 }
             } catch (Exception e) {
                System.out.println("Incorrect dimention. Please try again.");
                System.out.print("\r\n");
+
                play();
             }
             
       }
       
-      void aiturn(){
-		
+      void aiturn(){		
                     ai.humanX(x,y);
                     ai.aiturn();
+
                     x = ai.getX();
 	            y = ai.getY();   
                     
                     arr[x][y] = "O";
+
                     ys.add((int)((y+1)*Math.pow(10,x)));
+
                     System.out.println("Computer turn");
                     System.out.print("\r\n");
                     f.viewarr(arr);
-                    System.out.print("\r\n");
-		
-                
-            
-}
-
-     short getRandomShort(short a, short b){          
-           short s = (short)Math.round(Math.random()*(double)(b-a)+(double)a);
-           return s;
-}
+                    System.out.print("\r\n");		                     
+     }
 }
