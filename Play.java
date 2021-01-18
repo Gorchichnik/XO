@@ -18,9 +18,10 @@ public class Play {
                  arr = new String[d][d];
 
                  for(int x=0; x<=d-1; x++){
+			System.out.print("\r\n");
                     for(int y=0; y<=d-1; y++){
                        arr[x][y] = "_";
-                       System.out.print("[_]"); 
+                       System.out.print(" [_] "); 
                     }
                     System.out.print("\r\n");
                  }            
@@ -146,38 +147,52 @@ public class Play {
 
 
       void play(){ 
-            System.out.println("PLease enter coordinates of your turn");
+            System.out.println("Please enter coordinates of your turn :       (To exit enter 'exit')");
             System.out.print("\r\n");
 
             Scanner sc = new Scanner(System.in);
 
             try{
-               x = sc.nextShort();
-               y = sc.nextShort();
+		if (sc.hasNextShort()){
+               		x = sc.nextShort();
+              		y = sc.nextShort();
 
-               if( arr[x-1][y-1] != "X" & arr[x-1][y-1] != "O"){
-                   arr[x-1][y-1] = "X";                   
-                   num1++;
-                   xs.add((int)(y*Math.pow(10,x-1)));
+	               if( arr[x-1][y-1] != "X" & arr[x-1][y-1] != "O"){
+        	           arr[x-1][y-1] = "X";                   
+                	   num1++;
+	                   xs.add((int)(y*Math.pow(10,x-1)));
+	
+        	           System.out.println(" ");
+                	   System.out.println("Your move : ");
+	                   System.out.println(" ");
 
-                   System.out.println(" ");
-                   System.out.println("Your turn");
-                   System.out.println(" ");
+	                   f.viewarr(arr);
+	
+        	           System.out.print("\r\n");
 
-                   f.viewarr(arr);
-
-                   System.out.print("\r\n");
-
-                   game1();
+	                   game1();
                 
-	        } else {
- 	 	    System.out.println("This cell is not empty!");
-                    System.out.println();
+		        } else {
+			   System.out.println();
+ 	 	 	   System.out.println("This cell is not empty!");
+                    	   System.out.println();
 
-                    play();
-                }
-            } catch (Exception e) {
-               System.out.println("Incorrect dimention. Please try again.");
+                           play();
+                	}
+		}else if (sc.hasNextLine()){
+			if(sc.nextLine().equals("exit")){
+				System.out.print("\r\n");
+				System.out.println("Bye...");
+				System.out.print("\r\n");
+			}else{
+				System.out.println("Incorrect pass. Please try again.");
+		               System.out.print("\r\n");
+
+		               play();
+			}
+		}
+            } catch (Exception e) {             
+               System.out.println("Incorrect pass. Please try again.");
                System.out.print("\r\n");
 
                play();
@@ -196,7 +211,7 @@ public class Play {
 
                     ys.add((int)((y+1)*Math.pow(10,x)));
 
-                    System.out.println("Computer turn");
+                    System.out.println("Computer's turn : ");
                     System.out.print("\r\n");
                     f.viewarr(arr);
                     System.out.print("\r\n");		                     

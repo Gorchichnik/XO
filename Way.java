@@ -22,12 +22,7 @@ public class Way {
                  case 6:
                     
                     f.game((short) 6);
-                    break;
-                 default:
-                    System.out.println("Incorrect command. Please pass the wright number.");
-                    Scanner s = new Scanner(System.in);
-                    short d1 = s.nextShort();
-                    way(d1);
+                    break;                    
            }
            
       }
