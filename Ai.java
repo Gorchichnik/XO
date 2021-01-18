@@ -35,7 +35,12 @@ public class Ai {
 
         void aiturn(){
 		makeMatrix();
-             
+                for(int x=0; x<=dim-1; x++){
+                    for(int y=0; y<=dim-1; y++){                       
+                       System.out.print(" [" + pr[x][y] + "] " ); 
+                    }
+                    System.out.print("\r\n");
+                 }      
 		  
                 findmax();
 		int z = getRandomInt(0, xs.size());
