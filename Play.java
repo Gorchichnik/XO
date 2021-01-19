@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.io.IOException;
 
 public class Play {
 
@@ -16,16 +17,12 @@ public class Play {
 	
       void game(short d){
                  arr = new String[d][d];
-
-                 for(int x=0; x<=d-1; x++){
-			System.out.print("\r\n");
+		 for(int x=0; x<=d-1; x++){
                     for(int y=0; y<=d-1; y++){
                        arr[x][y] = "_";
-                       System.out.print(" [_] "); 
                     }
-                    System.out.print("\r\n");
-                 }            
-                 System.out.print("\r\n");
+                 }    
+                 viewArr();
 
                  ai.defineMatrix(d,arr);
                  dim=d;
@@ -63,6 +60,14 @@ public class Play {
                  }else if((double)num1>=((double)(dim*dim))/2){
                         System.out.println("Dead heat!"); 
                  }else{
+			try
+			{
+   				 Thread.sleep(ai.getRandomInt(200,1000));
+			}
+			catch(InterruptedException ex)
+			{
+				 Thread.currentThread().interrupt();
+			}
                         aiturn();
 			yes = false;
                         if(num1>=dim & bruteforce(ys, -1, ys.size(), 0, 0)){
@@ -97,9 +102,20 @@ public class Play {
 		return yes;
 	}
 
+      void viewArr(){
+              try{
+		try{
+	                   f.viewarr(arr);
+                } catch (IOException e) {System.out.println("Mistake!");}
+              } catch (InterruptedException en) {System.out.println("Mistake!");}
+      }
+
       void play(){ 
-            System.out.println("Please enter coordinates of your turn :       (To exit enter 'exit')");
+	    System.out.println(" ");	
+            System.out.println("(first - horizontal; second - vertical)         (To exit enter 'exit')");
             System.out.print("\r\n");
+            System.out.println("Please enter coordinates of your turn :");
+            System.out.println(" ");
 
             Scanner sc = new Scanner(System.in);
 
@@ -112,14 +128,8 @@ public class Play {
         	           arr[x-1][y-1] = "X";                   
                 	   num1++;
 	                   xs.add((int)(y*Math.pow(10,x-1)));
-	
-        	           System.out.println(" ");
-                	   System.out.println("Your move : ");
-	                   System.out.println(" ");
-
-	                   f.viewarr(arr);
-	
-        	           System.out.print("\r\n");
+                           viewArr();
+      	                   System.out.print("\r\n");
 
 	                   game1();
                 
@@ -161,10 +171,7 @@ public class Play {
                     arr[x][y] = "O";
 
                     ys.add((int)((y+1)*Math.pow(10,x)));
-
-                    System.out.println("Computer's turn : ");
-                    System.out.print("\r\n");
-                    f.viewarr(arr);
+		    viewArr();
                     System.out.print("\r\n");		                     
      }
 }

@@ -94,39 +94,72 @@ public class Ai {
 
 
 
-	boolean sense; // does it make sense if horizontal, vertical or diagonal has "X" and "O" at the same time?
+	boolean sense, empty; // does it make sense if horizontal, vertical or diagonal has "X" and "O" at the same time?
 
 	void makeMatrixEvo(){
 		matrixNull(); 
-		int s1,s2,s; // values of horizontal, vertical and diagonal probabilities  
+		int s1,s2,s,emp; // values of horizontal, vertical and diagonal probabilities  
 		
 		int way;     //  horizontal is 1, vertical is 2, diagonals are 3 & 4;
 		
 		for(int i = 0; i < dim; i++){
 			for(int j = 0; j < dim; j++){
-				s = 0;
-                                s1 = 0;
-                                s2 = 0;
+				
 
 				if(arr[i][j] != "X" & arr[i][j] != "O"){
-					sense = true;	
+					s = 0;
+                              		s1 = 0;
+                               		s2 = 0;
+			                emp = 0;
+					sense = true;
+					empty = true;	
 
 					pr[i][j] += soSlovVovana2(j, i, s1, 1);	
 					sense = true;
+					if(empty){
+						emp +=1;
+
+					}else{
+						empty = true;
+					}
 
 					pr[i][j] += soSlovVovana2(i, j, s2, 2);
 					sense = true;
+					if(empty){
+						emp +=1;
+
+					}else{
+						empty = true;
+					}
 
 				      	if(i == j){
 						pr[i][j] += soSlovVovana2(i, i, s, 3);
+						if(empty){
+							emp +=1;
+
+						}else{
+							empty = true;
+						}
+
 					}	
 
                                		s = 0;
 					sense = true;
-
+					
 					if(i + j == dim - 1){
-						pr[i][j] += soSlovVovana2(dim - i - 1, i , s, 4);	
-					}				
+						pr[i][j] += soSlovVovana2(dim - i - 1, i , s, 4);
+						if(empty){
+							emp +=1;
+
+						}else{
+							empty = true;
+						}	
+					}
+
+					
+					if(emp!=0){
+						pr[i][j] += (int)Math.pow(emp,2);	
+   					}
 				}		
 			}
 		}
@@ -158,10 +191,12 @@ public class Ai {
 	int soSlovVovana(int n, int m, String check, int sum){
 		if(arr[n][m] == check ){
 			sum++;
+			empty = false;
 		}
 		if(arr[n][m] != check & arr[n][m] != "_" & sum!=0 ){
 			sum=0;
 			sense = false;
+			empty = false;
 			br = true;
 		}
  		return sum;
