@@ -109,95 +109,73 @@ public class Ai {
                                 s2 = 0;
 
 				if(arr[i][j] != "X" & arr[i][j] != "O"){
-					sense = true;					
-					s1 = forXO(j, 0, i, "X", s1, 1);
+					sense = true;	
 
-					if(sense){
-						s1 = forXO(j, i, dim - 1, "X", s1, 1);	
-					}
-                                        if(s1==0 & sense){
-						s1 = forXO(j, 0, i, "O", s1, 1);
-						if(sense){
-							s1 = forXO(j, i, dim - 1, "O", s1, 1);	
-						}
-					}
-
-					if(s1!=0){
-						pr[i][j] += (int)Math.pow(s1,s1);
-					}
-
+					pr[i][j] += soSlovVovana2(j, i, s1, 1);	
 					sense = true;
 
-					s2 = forXO(i, 0, j, "X", s2, 2);
-					if(sense){
-						s2 = forXO( i, j, dim - 1, "X", s2, 2);		
-					}
-                                        if(s2==0 & sense){
-						s2 = forXO(i, 0, j, "O", s2, 2);
-						if(sense){
-							s2 = forXO( i, j, dim - 1, "O", s2, 2);		
-						}
-					}
-
-					if(s2!=0){
-						pr[i][j] += (int)Math.pow(s2,s2);
-					}
-					
+					pr[i][j] += soSlovVovana2(i, j, s2, 2);
 					sense = true;
 
 				      	if(i == j){
-						s = forXO(i, 0, i, "X", s, 3);
-						if(sense){
-							s = forXO(i, i, dim - 1, "X", s, 3);
-						}
-                                       		if(s==0 & sense){
-							s = forXO(i, 0, i, "O", s, 3);
-							if(sense){
-								s = forXO(i, i, dim - 1, "O", s, 3);	
-							}
-						}
-
-                                       		if(s!=0){
-							pr[i][i] += (int)Math.pow(s,s);
-						}
-
+						pr[i][j] += soSlovVovana2(i, i, s, 3);
 					}	
 
                                		s = 0;
 					sense = true;
 
 					if(i + j == dim - 1){
-						s = forXO(dim - i - 1, 0, i, "X", s, 4);
-						if(sense){
-							s = forXO(dim - i - 1, i, dim - 1, "X", s, 4);	
-						}
-                                      		if(s==0 & sense){
-							s = forXO(dim - i - 1, 0, i, "O", s, 4);
-							if(sense){
-								s = forXO(dim - i - 1, i, dim - 1, "O", s, 4);	
-							}
-						}
-
-						if(s!=0){
-							pr[i][j] += (int)Math.pow(s,s);
-						}
+						pr[i][j] += soSlovVovana2(dim - i - 1, i , s, 4);	
 					}				
 				}		
 			}
 		}
 	}
 
+	int soSlovVovana2(int j, int i, int s, int d){
+                int ret = 0;
+		s = forXO(j, 0, i, "X", s, d);
+
+		if(sense){
+			s = forXO(j, i, dim - 1, "X", s, d);	
+		}
+                if(s==0 & sense){
+			s = forXO(j, 0, i, "O", s, d);
+			if(sense){
+				s = forXO(j, i, dim - 1, "O", s, d);	
+	  		}
+		}
+
+		if(s!=0){
+			ret += (int)Math.pow(s,s);
+		}
+
+		return ret;
+	}
+
+	boolean br;
+
+	int soSlovVovana(int n, int m, String check, int sum){
+		if(arr[n][m] == check ){
+			sum++;
+		}
+		if(arr[n][m] != check & arr[n][m] != "_" & sum!=0 ){
+			sum=0;
+			sense = false;
+			br = true;
+		}
+ 		return sum;
+	}
+
 	int forXO(int fix, int from, int to, String check, int sum, int way){
+		br = false;
+		
 		switch(way){
 
-		case 1:
-			for(int n = from; n <= to; n++){
-				if(arr[n][fix] == check ){
-				sum++;
-				}
-				if(arr[n][fix] != check & arr[n][fix] != "_" & sum!=0 ){
-					sum=0;
-					sense = false;
+		case 1:		
+			for(int n = from; n <= to; n++){			
+				sum = soSlovVovana(n, fix, check, sum);
+				if(br){
 					break;
 				}
 			}
@@ -205,12 +183,8 @@ public class Ai {
 
 		case 2: 
 			for(int n = from; n <= to; n++){
-				if(arr[fix][n] == check ){
-				sum++;
-				}
-				if(arr[fix][n] != check & arr[fix][n] != "_" & sum!=0 ){
-					sum=0;
-					sense = false;
+				sum = soSlovVovana(fix, n, check, sum);
+				if(br){
 					break;
 				}
 			}
@@ -218,12 +192,8 @@ public class Ai {
 
 		case 3: 
 			for(int n = from; n <= to; n++){
-				if(arr[n][n] == check ){
-				sum++;
-				}
-				if(arr[n][n] != check & arr[n][n] != "_" & sum!=0 ){
-					sum=0;
-					sense = false;
+				sum = soSlovVovana(n, n, check, sum);
+				if(br){
 					break;
 				}
 			}
@@ -231,12 +201,8 @@ public class Ai {
 
 		case 4: 
 			for(int n = from; n <= to; n++){
-				if(arr[n][dim - 1 -n] == check ){
-				sum++;
-				}
-				if(arr[n][dim - 1 -n] != check & arr[n][dim - 1 -n] != "_" & sum!=0 ){
-					sum=0;
-					sense = false;
+				sum = soSlovVovana(n, dim - n -1, check, sum);
+				if(br){
 					break;
 				}
 			}

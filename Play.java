@@ -55,7 +55,8 @@ public class Play {
               xt.add(h);                          
       }  
 
-      void game1(){             
+      void game1(){        
+		 yes = false;     
                    
                  if(num1>=dim & bruteforce(xs, -1, xs.size(), 0, 0) ){
                         System.out.println("You win!"); 
@@ -63,11 +64,7 @@ public class Play {
                         System.out.println("Dead heat!"); 
                  }else{
                         aiturn();
-//System.out.println("Ys = ");
-//for (int i = 0; i < ys.size() ; i++){
-//	System.out.println(" " + ys.get(i) + " ");
-//} 
-
+			yes = false;
                         if(num1>=dim & bruteforce(ys, -1, ys.size(), 0, 0)){
                                System.out.println("You loose!"); 
                         } else{
@@ -75,19 +72,19 @@ public class Play {
                         }
                  }                                
       }
+	boolean yes;
 	
         boolean bruteforce(ArrayList<Integer> xr, int i, int size , int num , int s){
 		num += 1;
-		boolean yes = false;
+
 		for(int j = i + 1; j <= size - dim + num - 1; j++){
 			if(num == dim){
 				s += xr.get(j);
 				if(xt.contains(s)){
 					yes = true;
-				}else{
-					yes = false;
+//					System.out.println(" true ");
 				}
-				//System.out.println(" s = " + s);
+//				System.out.println(" s = " + s);
 					
 			}else{
 				s += xr.get(j);
@@ -96,6 +93,7 @@ public class Play {
 			s -= xr.get(j);
 			
 		}
+//		if(yes){System.out.println(" true ");}
 		return yes;
 	}
 
