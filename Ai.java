@@ -43,7 +43,7 @@ public class Ai {
 
         void aiturn(){
 
-		makeMatrix(); // initialisation of the probability Matrix
+		makeMatrixEvo(); // initialisation of the probability Matrix
                      
                 findmax(); // finding of the maximal points in probability Matrix
 
@@ -92,12 +92,15 @@ public class Ai {
         
 	//Next method is "the heart" of AI algorithm . Can't explain )
 
-	void makeMatrix(){
 
+
+	boolean sense; // does it make sense if horizontal, vertical or diagonal has "X" and "O" at the same time?
+
+	void makeMatrixEvo(){
 		matrixNull(); 
 		int s1,s2,s; // values of horizontal, vertical and diagonal probabilities  
-		boolean sense = true; // does it make sense if horizontal, vertical or diagonal has "X" and "O" at the same time?
- 		
+		
+		int way;     //  horizontal is 1, vertical is 2, diagonals are 3 & 4;
 		
 		for(int i = 0; i < dim; i++){
 			for(int j = 0; j < dim; j++){
@@ -105,168 +108,57 @@ public class Ai {
                                 s1 = 0;
                                 s2 = 0;
 
-				if(arr[i][j] != "X" & arr[i][j] != "O"){					
-					for(int n = 0; n <= i; n++){
-						if(arr[n][j] == "X" & n!=i){
-							s1++;
-						}
-						if(arr[n][j] == "O" & s1!=0 & n!=i){
-							s1=0;
-							sense = false;
-							break;
-						}
-					}
+				if(arr[i][j] != "X" & arr[i][j] != "O"){
+					sense = true;					
+					s1 = forXO(j, 0, i, "X", s1, 1);
 
 					if(sense){
-						for(int m = i; m < dim; m++){
-							if(arr[m][j] == "X" & m!=i){
-								s1++;
-							}
- 							if(arr[m][j] == "O" & s1!=0  & m!=i){
-								s1=0;
-								sense = false;
-								break;
-							}
-						}
+						s1 = forXO(j, i, dim - 1, "X", s1, 1);	
 					}
-	
                                         if(s1==0 & sense){
-						for(int n = 0; n <=i; n++){
-							if(arr[n][j] == "O"  & n!=i){
-								s1++;
-							}	
-							if(arr[n][j] == "X" & s1!=0  & n!=i){
-								s1=0;
-								sense = false;
-								break;
-							}						
-						}
+						s1 = forXO(j, 0, i, "O", s1, 1);
 						if(sense){
-							for(int m = i; m < dim; m++){
-								if(arr[m][j] == "O"  & m!=i){
-									s1++;
-								}	
-								if(arr[m][j] == "X" & s1!=0  & m!=i){
-									s1=0;
-									break;
-								}						
-							}
+							s1 = forXO(j, i, dim - 1, "O", s1, 1);	
 						}
 					}
 
 					if(s1!=0){
-						s1 = (int)Math.pow(s1,s1);
-						pr[i][j] = pr[i][j] + s1;
+						pr[i][j] += (int)Math.pow(s1,s1);
 					}
-					
+
 					sense = true;
 
-					for(int n = 0; n <=j; n++){
-						if(arr[i][n] == "X"  & n!=j){
-							s2++;
-						}
-						if(arr[i][n] == "O" & s2!=0   & n!=j){
-							s2=0;
-							sense = false;
-							break;							
-						}
-					}
-
+					s2 = forXO(i, 0, j, "X", s2, 2);
 					if(sense){
-						for(int m = j; m < dim; m++){
-							if(arr[i][m] == "X"  & m!=j){
-								s2++;
-							}
- 							if(arr[i][m] == "O" & s2!=0  & m!=j){
-								s2=0;
-								sense = false;
-								break;							
-							}
-						}
+						s2 = forXO( i, j, dim - 1, "X", s2, 2);		
 					}
-			
                                         if(s2==0 & sense){
-						for(int n = 0; n <=j; n++){
-							if(arr[i][n] == "O" & n!=j){
-								s2++;
-							}	
-							if(arr[i][n] == "X" & s2!=0   & n!=j){
-								s2=0;
-								sense = false;
-								break;				
-							}				
-						}
+						s2 = forXO(i, 0, j, "O", s2, 2);
 						if(sense){
-							for(int m = j; m < dim; m++){
-								if(arr[i][m] == "O"  & m!=j){
-									s2++;
-								} 	
-								if(arr[i][m] == "X" & s2!=0   & m!=j){
-									s2=0;
-									break;
-								}						
-							}
-						}						
+							s2 = forXO( i, j, dim - 1, "O", s2, 2);		
+						}
 					}
-			
+
 					if(s2!=0){
-						s2 = (int)Math.pow(s2,s2);
-						pr[i][j] = pr[i][j] + s2;
+						pr[i][j] += (int)Math.pow(s2,s2);
 					}
 					
 					sense = true;
+
 				      	if(i == j){
-						for(int n = i; n >=0; n--){
-							if(arr[n][n] == "X"   & n!=i){
-								s++;
-							}
-							if(arr[n][n] == "O" & s!=0 & n!=i){
-								s=0;
-								sense = false;
-								break;	
-							}
-						}
-
+						s = forXO(i, 0, i, "X", s, 3);
 						if(sense){
-							for(int m = i; m < dim; m++){
-								if(arr[m][m] == "X"   & m!=i){
-									s++;
-								}
- 								if(arr[m][m] == "O" & s!=0 & m!=i){
-									s=0;
-									sense = false;
-									break;
-								}
-							}
+							s = forXO(i, i, dim - 1, "X", s, 3);
 						}
-
-						if(s == 0 & sense){
-							for(int n = i; n >=0; n--){
-								if(arr[n][n] == "O" & n!=i){
-									s++;
-								}	
-								if(arr[n][n] == "X" & s!=0 & n!=i){
-									s=0;
-									sense = false;
-									break;	
-								}
+                                       		if(s==0 & sense){
+							s = forXO(i, 0, i, "O", s, 3);
+							if(sense){
+								s = forXO(i, i, dim - 1, "O", s, 3);	
 							}
-
-							for(int m = i; m < dim; m++){
-								if(arr[m][m] == "O"   & m!=i){
-									s++;
-								} 		
-								if(arr[m][m] == "X" & s!=0 & m!=i){
-									s=0;
-									sense = false;
-									break;	
-								}					
-							}
-					
 						}
 
                                        		if(s!=0){
-							pr[i][i] = pr[i][i] + (int)Math.pow(s,s);
+							pr[i][i] += (int)Math.pow(s,s);
 						}
 
 					}	
@@ -275,59 +167,81 @@ public class Ai {
 					sense = true;
 
 					if(i + j == dim - 1){
-						for(int n = i; n >=0; n--){
-							if(arr[n][dim - 1 - n] == "X"   & n!=i){
-								s++;
-							}
-							if(arr[n][dim - 1 - n] == "O" & s!=0  & n!=i){
-								s=0;
-								sense = false;
-								break;
-							}
+						s = forXO(dim - i - 1, 0, i, "X", s, 4);
+						if(sense){
+							s = forXO(dim - i - 1, i, dim - 1, "X", s, 4);	
 						}
-
-						for(int m = i; m < dim; m++){
-							if(arr[m][dim - 1 -m] == "X"  & m!=i){
-								s++;
+                                      		if(s==0 & sense){
+							s = forXO(dim - i - 1, 0, i, "O", s, 4);
+							if(sense){
+								s = forXO(dim - i - 1, i, dim - 1, "O", s, 4);	
 							}
- 							if(arr[m][dim - 1 -m] == "O" & s!=0  & m!=i){
-								s=0;
-								sense = false;
-								break;
-							}
-						}
-
-						if(s == 0){
-							for(int n = i; n >=0; n--){
-								if(arr[n][dim - 1 -n] == "O"  & n!=i){
-									s++;
-								}	
-								if(arr[n][dim - 1 - n] == "X" & s!=0  & n!=i){
-									s=0;
-									sense = false;
-									break;
-								}
-							}
-							for(int m = i; m < dim; m++){
-								if(arr[m][dim - 1 -m] == "O"  & m!=i){
-									s++;
-								} 	
-								if(arr[m][dim - 1 - m] == "X" & s!=0  & m!=i){
-									s=0;
-									sense = false;
-									break;
-								}						
-							}						
 						}
 
 						if(s!=0){
-							pr[i][j] = pr[i][j] + (int)Math.pow(s,s);
+							pr[i][j] += (int)Math.pow(s,s);
 						}
-					}					
-				}else{
-					pr[i][j] = 0;
+					}				
 				}		
 			}
 		}
+	}
+
+	int forXO(int fix, int from, int to, String check, int sum, int way){
+		switch(way){
+
+		case 1:
+			for(int n = from; n <= to; n++){
+				if(arr[n][fix] == check ){
+				sum++;
+				}
+				if(arr[n][fix] != check & arr[n][fix] != "_" & sum!=0 ){
+					sum=0;
+					sense = false;
+					break;
+				}
+			}
+		break;
+
+		case 2: 
+			for(int n = from; n <= to; n++){
+				if(arr[fix][n] == check ){
+				sum++;
+				}
+				if(arr[fix][n] != check & arr[fix][n] != "_" & sum!=0 ){
+					sum=0;
+					sense = false;
+					break;
+				}
+			}
+		break;
+
+		case 3: 
+			for(int n = from; n <= to; n++){
+				if(arr[n][n] == check ){
+				sum++;
+				}
+				if(arr[n][n] != check & arr[n][n] != "_" & sum!=0 ){
+					sum=0;
+					sense = false;
+					break;
+				}
+			}
+		break;
+
+		case 4: 
+			for(int n = from; n <= to; n++){
+				if(arr[n][dim - 1 -n] == check ){
+				sum++;
+				}
+				if(arr[n][dim - 1 -n] != check & arr[n][dim - 1 -n] != "_" & sum!=0 ){
+					sum=0;
+					sense = false;
+					break;
+				}
+			}
+		break;
+		}
+		return sum;
 	}
 }

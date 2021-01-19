@@ -15,7 +15,7 @@ public class Hello {
                     if(Character.isSpaceChar(str.charAt(i))){
 				try
 			{
-   				 Thread.sleep(ai.getRandomInt(100,300));
+   				 Thread.sleep(ai.getRandomInt(80,200));
 			}
 			catch(InterruptedException ex)
 			{
@@ -46,7 +46,7 @@ if(begining){
            System.out.println(" "); 
 		try
 		{
- 		   Thread.sleep(1600);
+ 		   Thread.sleep(800);
 		}
 		catch(InterruptedException ex)
 		{
@@ -57,7 +57,7 @@ if(begining){
            System.out.println(" ");
            try
 		{
- 		   Thread.sleep(700);
+ 		   Thread.sleep(400);
 		}
 		catch(InterruptedException ex)
 		{
@@ -67,7 +67,7 @@ if(begining){
            coolPrinting("3, 4, 5 or 6?");
 	   try
 		{
- 		   Thread.sleep(400);
+ 		   Thread.sleep(300);
 		}
 		catch(InterruptedException ex)
 		{

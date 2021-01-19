@@ -55,13 +55,19 @@ public class Play {
               xt.add(h);                          
       }  
 
-      void game1(){                                    
+      void game1(){             
+                   
                  if(num1>=dim & bruteforce(xs, -1, xs.size(), 0, 0) ){
                         System.out.println("You win!"); 
                  }else if((double)num1>=((double)(dim*dim))/2){
                         System.out.println("Dead heat!"); 
                  }else{
                         aiturn();
+//System.out.println("Ys = ");
+//for (int i = 0; i < ys.size() ; i++){
+//	System.out.println(" " + ys.get(i) + " ");
+//} 
+
                         if(num1>=dim & bruteforce(ys, -1, ys.size(), 0, 0)){
                                System.out.println("You loose!"); 
                         } else{
@@ -77,15 +83,18 @@ public class Play {
 			if(num == dim){
 				s += xr.get(j);
 				if(xt.contains(s)){
-					return true;
+					yes = true;
 				}else{
-					return false;
+					yes = false;
 				}
+				//System.out.println(" s = " + s);
 					
 			}else{
 				s += xr.get(j);
 				yes = bruteforce(xr, j , size, num, s);				
 			}
+			s -= xr.get(j);
+			
 		}
 		return yes;
 	}
