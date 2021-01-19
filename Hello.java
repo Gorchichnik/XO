@@ -5,7 +5,7 @@ public class Hello {
       
       Scanner s = new Scanner(System.in);
       short d;
-      Way w = new Way();
+      Play p = new Play();
       Ai ai = new Ai();
       boolean begining = true;
 
@@ -82,7 +82,7 @@ if(begining){
 	           d = s.nextShort();
 			if(d >2 & d<7){
         	             System.out.println(" ");
-           	             w.way(d);
+           	             p.game(d);
                         }else {
 			     System.out.println(" ");
 			     System.out.println(" Incorrect dimention. Try 3,4,5 or 6 : ");

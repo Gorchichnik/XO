@@ -56,95 +56,39 @@ public class Play {
       }  
 
       void game1(){                                    
-                 if(num1>=dim & win(xs)){
+                 if(num1>=dim & bruteforce(xs, -1, xs.size(), 0, 0) ){
                         System.out.println("You win!"); 
                  }else if((double)num1>=((double)(dim*dim))/2){
                         System.out.println("Dead heat!"); 
                  }else{
                         aiturn();
-                        if(num1>=dim & win(ys)){
+                        if(num1>=dim & bruteforce(ys, -1, ys.size(), 0, 0)){
                                System.out.println("You loose!"); 
                         } else{
                                play();
                         }
                  }                                
       }
-
-      boolean win(ArrayList<Integer> xr){
-             boolean w = false;
-             int s;
-             switch(dim) {
-             case 3:
-                for(int i = 0; i <= xr.size()-dim; i++){
-                    for(int j = i+1; j<= xr.size()-dim+1; j++){
-                           for(int k = j+1; k<= xr.size()-dim+2; k++){
-                                  s = xr.get(i)+xr.get(j)+xr.get(k);
-                                 
-                                  if(xt.contains(s)){
-                                        w = true;
-                                  }
-                           }
-                    }
-                }
-                break;
-             case 4:
-                for(int i = 0; i <= xr.size()-dim; i++){
-                    for(int j = i+1; j<= xr.size()-dim+1; j++){
-                           for(int k = j+1; k<= xr.size()-dim+2; k++){
-                                for(int b = k+1; b<= xr.size()-dim+3; b++){
-                                  s = xr.get(i)+xr.get(j)+xr.get(k)+xr.get(b);
-                                  
-                                  if(xt.contains(s)){
-                                        w = true;
-                                  }
-                                }
-                           }
-                    }
-                }
-             
-             break;
-             case 5:
-                for(int i = 0; i <= xr.size()-dim; i++){
-                    for(int j = i+1; j<= xr.size()-dim+1; j++){
-                           for(int k = j+1; k<= xr.size()-dim+2; k++){
-                                for(int b = k+1; b<= xr.size()-dim+3; b++){
-               				for(int a = b+1; a<= xr.size()-dim+4; a++){
-                                  s = xr.get(i)+xr.get(j)+xr.get(k)+xr.get(b)+xr.get(a);
-                                  
-                                  if(xt.contains(s)){
-                                        w = true;
-                                  }
-                                        }
-                                }
-                           }
-                    }
-                }
-             
-             break;
-             case 6:
-                for(int i = 0; i <= xr.size()-dim; i++){
-                    for(int j = i+1; j<= xr.size()-dim+1; j++){
-                           for(int k = j+1; k<= xr.size()-dim+2; k++){
-                                for(int b = k+1; b<= xr.size()-dim+3; b++){
-               				for(int a = b+1; a<= xr.size()-dim+4; a++){
-                                               for(int c = a+1; c<= xr.size()-dim+5; c++){
-                                  s = xr.get(i)+xr.get(j)+xr.get(k)+xr.get(b)+xr.get(a)+xr.get(c);
-                                  
-                                  if(xt.contains(s)){
-                                        w = true;
-                                  }
-                                               }
-                                        }
-                                }
-                           }
-                    }
-                }
-             
-             break;
-}
-             return w;
-      }
-
+	
+        boolean bruteforce(ArrayList<Integer> xr, int i, int size , int num , int s){
+		num += 1;
+		boolean yes = false;
+		for(int j = i + 1; j <= size - dim + num - 1; j++){
+			if(num == dim){
+				s += xr.get(j);
+				if(xt.contains(s)){
+					return true;
+				}else{
+					return false;
+				}
+					
+			}else{
+				s += xr.get(j);
+				yes = bruteforce(xr, j , size, num, s);				
+			}
+		}
+		return yes;
+	}
 
       void play(){ 
             System.out.println("Please enter coordinates of your turn :       (To exit enter 'exit')");
